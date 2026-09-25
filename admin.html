@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Dashboard — Training Connect Global</title>
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="admin">
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="Training Connect Global"></a>
+    <nav class="main-nav">
+      <a href="index.html" data-nav="home">Home</a>
+      <a href="courses.html" data-nav="courses">Courses</a>
+      <a href="about.html" data-nav="about">About</a>
+      <a href="enquire.html" data-nav="enquire">Enquire</a>
+      <a href="dashboard.html" data-nav="dashboard">My Dashboard</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span class="bar bar-top"></span><span class="bar bar-mid"></span><span class="bar bar-bottom"></span></button>
+      <a class="btn btn-line btn-sm" href="admin.html">Admin</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="padding-top:48px">
+    <div class="wrap">
+      <div class="dash-head">
+        <div>
+          <h1 style="font-size:clamp(1.8rem,3.5vw,2.4rem)">Admin dashboard</h1>
+          <p class="muted" style="margin:0">Manage courses, enquiries, users and referrals.</p>
+        </div>
+        <a class="btn btn-primary" href="courses.html">+ Add course</a>
+      </div>
+
+      <div class="notice">This is an interactive design preview with sample data. Course management, enquiry assignment and WhatsApp workflows will be connected to the live database and a login-protected admin area.</div>
+
+      <div class="stat-row">
+        <div class="stat"><span>Active courses</span><b>11</b></div>
+        <div class="stat"><span>New enquiries</span><b>37</b></div>
+        <div class="stat"><span>Referrals this month</span><b>19</b></div>
+        <div class="stat"><span>Pending follow-ups</span><b>11</b></div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="panel">
+          <h3>Recent enquiries</h3>
+          <table>
+            <thead><tr><th>Name</th><th>Programme</th><th>Source</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Jane W.</td><td>Data Analysis with SPSS</td><td>Website</td><td><span class="badge badge-amber">New</span></td></tr>
+              <tr><td>Peter O.</td><td>Applied Statistics for Data Science</td><td>Referral</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+              <tr><td>Mary A.</td><td>Digital Skills for the Workplace</td><td>WhatsApp</td><td><span class="badge badge-blue">Follow-up</span></td></tr>
+              <tr><td>Brian K.</td><td>Financial Management &amp; Budgeting</td><td>Website</td><td><span class="badge badge-amber">New</span></td></tr>
+              <tr><td>Aisha M.</td><td>Strategic HR Management</td><td>Referral</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h3>Referral sources</h3>
+          <p class="muted" style="margin:0 0 4px">Website</p>
+          <div class="bar-track"><span class="bar-fill" style="width:74%"></span></div>
+          <p class="muted" style="margin:0 0 4px">WhatsApp</p>
+          <div class="bar-track"><span class="bar-fill" style="width:55%;background:var(--green)"></span></div>
+          <p class="muted" style="margin:0 0 4px">Direct referral</p>
+          <div class="bar-track"><span class="bar-fill" style="width:38%;background:#E0A100"></span></div>
+          <p class="muted" style="margin:0 0 4px">Other</p>
+          <div class="bar-track"><span class="bar-fill" style="width:21%;background:#8A4B00"></span></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:20px">
+        <h3>Admin modules</h3>
+        <div class="module-grid">
+          <div><b>Course management</b><p class="muted" style="margin:4px 0 0">Add, edit, activate or deactivate and categorise courses.</p></div>
+          <div><b>Enquiry management</b><p class="muted" style="margin:4px 0 0">View enquiries, assign follow-ups and update statuses.</p></div>
+          <div><b>Referral tracking</b><p class="muted" style="margin:4px 0 0">Track referral source, trainee status and commission records.</p></div>
+          <div><b>User management</b><p class="muted" style="margin:4px 0 0">Manage administrators, users and access permissions.</p></div>
+          <div><b>Reports &amp; analytics</b><p class="muted" style="margin:4px 0 0">Course demand, enquiries, conversions and referral reports.</p></div>
+          <div><b>WhatsApp integration</b><p class="muted" style="margin:4px 0 0">Connect enquiries and follow-ups to WhatsApp workflows.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand"><img class="mark" src="assets/icon-square.png" alt=""> Training Connect Global</div>
+        <p class="muted" style="color:#A9BBDD">An independent training referral platform — connecting professionals with the right training provider for their needs.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="courses.html">All courses</a></li>
+          <li><a href="about.html">About us</a></li>
+          <li><a href="enquire.html">Make an enquiry</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="courses.html?cat=data">Data &amp; Statistics</a></li>
+          <li><a href="courses.html?cat=leadership">Leadership &amp; Management</a></li>
+          <li><a href="courses.html?cat=finance">Finance &amp; Accounting</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@trainingconnectglobal.co.ke">info@trainingconnectglobal.co.ke</a></li>
+          <li><a href="tel:+254746753107">+254 746 753107</a></li>
+          <li>Nairobi, Kenya</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span data-year></span> Training Connect Global. All rights reserved.</span>
+      <span>Independent training referral platform.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/courses-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

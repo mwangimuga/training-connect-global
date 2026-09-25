@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Dashboard — Training Connect Global</title>
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="dashboard">
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="Training Connect Global"></a>
+    <nav class="main-nav">
+      <a href="index.html" data-nav="home">Home</a>
+      <a href="courses.html" data-nav="courses">Courses</a>
+      <a href="about.html" data-nav="about">About</a>
+      <a href="enquire.html" data-nav="enquire">Enquire</a>
+      <a href="dashboard.html" data-nav="dashboard">My Dashboard</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span class="bar bar-top"></span><span class="bar bar-mid"></span><span class="bar bar-bottom"></span></button>
+      <a class="btn btn-primary btn-sm" href="enquire.html">Make an enquiry</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="padding-top:48px">
+    <div class="wrap">
+      <div class="dash-head">
+        <div>
+          <h1 style="font-size:clamp(1.8rem,3.5vw,2.4rem)">My dashboard</h1>
+          <p class="muted" style="margin:0">Track your training enquiries and their status.</p>
+        </div>
+        <a class="btn btn-primary" href="courses.html">Browse courses</a>
+      </div>
+
+      <div class="notice">This is an interactive design preview. Enquiries you submit on this device are shown below alongside sample data — account login and server-side storage will be connected in the live version.</div>
+
+      <div class="stat-row">
+        <div class="stat"><span>My enquiries</span><b id="statTotal">–</b></div>
+        <div class="stat"><span>Pending</span><b id="statPending">–</b></div>
+        <div class="stat"><span>Confirmed</span><b id="statConfirmed">–</b></div>
+        <div class="stat"><span>Completed</span><b id="statCompleted">–</b></div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="panel">
+          <h3>Recent enquiries</h3>
+          <table>
+            <thead><tr><th>Course</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="dashTableBody"></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h3>Enquiry progress</h3>
+          <p class="muted" style="margin:0 0 4px">Confirmed</p>
+          <div class="bar-track"><span class="bar-fill" style="width:68%;background:var(--green)"></span></div>
+          <p class="muted" style="margin:0 0 4px">Follow-up</p>
+          <div class="bar-track"><span class="bar-fill" style="width:42%"></span></div>
+          <p class="muted" style="margin:0 0 4px">Pending</p>
+          <div class="bar-track"><span class="bar-fill" style="width:28%;background:#E0A100"></span></div>
+          <a class="btn btn-line btn-block" style="margin-top:18px" href="enquire.html">New enquiry</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand"><img class="mark" src="assets/icon-square.png" alt=""> Training Connect Global</div>
+        <p class="muted" style="color:#A9BBDD">An independent training referral platform — connecting professionals with the right training provider for their needs.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="courses.html">All courses</a></li>
+          <li><a href="about.html">About us</a></li>
+          <li><a href="enquire.html">Make an enquiry</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="courses.html?cat=data">Data &amp; Statistics</a></li>
+          <li><a href="courses.html?cat=leadership">Leadership &amp; Management</a></li>
+          <li><a href="courses.html?cat=finance">Finance &amp; Accounting</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@trainingconnectglobal.co.ke">info@trainingconnectglobal.co.ke</a></li>
+          <li><a href="tel:+254746753107">+254 746 753107</a></li>
+          <li>Nairobi, Kenya</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span data-year></span> Training Connect Global. All rights reserved.</span>
+      <span>Independent training referral platform.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/courses-data.js"></script>
+<script src="js/app.js"></script>
+<script>tcgInitDashboard();</script>
+</body>
+</html>
