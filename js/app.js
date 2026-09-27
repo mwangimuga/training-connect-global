@@ -12,6 +12,13 @@
    Firebase key is. */
 const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE";
 
+/* localStorage key every submitted enquiry is written to. Both dashboards
+   read from this same key, so "real-time tracked data" here means: real
+   submissions made on this browser/device. Without a server database,
+   that's the only enquiry activity a static site can see — see the note
+   above tcgInitAdminDashboard() for what this does and doesn't cover. */
+const TCG_STORAGE_KEY = "tcg_enquiries";
+
 /* ---------- Nav ---------- */
 function tcgInitNav(){
   const header = document.querySelector(".site-header");
@@ -53,6 +60,7 @@ function tcgCourseCardHTML(course){
         <div class="course-meta">
           <span>${course.duration}</span>
           <span>${course.mode}</span>
+          ${course.level && course.level !== "Custom" ? `<span>${course.level}</span>` : ""}
         </div>
         <div class="row">
           <a class="btn btn-line btn-sm" href="course-detail.html?c=${course.slug}">View details</a>
@@ -66,7 +74,7 @@ function tcgRenderGrid(containerId, list){
   const el = document.getElementById(containerId);
   if (!el) return;
   if (!list.length){
-    el.innerHTML = `<div class="empty-state"><h3>No courses match that filter</h3><p>Try a different category, or clear your search.</p></div>`;
+    el.innerHTML = `<div class="empty-state"><h3>No courses match that filter</h3><p>Try a different category or level, or clear your search.</p></div>`;
     el.classList.remove("course-grid");
     return;
   }
@@ -77,37 +85,55 @@ function tcgRenderGrid(containerId, list){
 /* ---------- Courses listing page ---------- */
 function tcgInitCoursesPage(){
   const grid = document.getElementById("courseGrid");
-  const chipsEl = document.getElementById("filterChips");
+  const catSelect = document.getElementById("categorySelect");
+  const levelChipsEl = document.getElementById("levelChips");
   const search = document.getElementById("courseSearch");
-  if (!grid || !chipsEl) return;
+  const countEl = document.getElementById("resultsCount");
+  if (!grid) return;
 
   const params = new URLSearchParams(location.search);
   let activeCat = params.get("cat") || "all";
+  let activeLevel = "all";
 
-  const chips = [{ key: "all", label: "All courses" }].concat(
-    Object.keys(TCG_CATEGORIES).map(k => ({ key: k, label: TCG_CATEGORIES[k].label }))
-  );
-  chipsEl.innerHTML = chips.map(c =>
-    `<button type="button" class="chip${c.key === activeCat ? " is-active" : ""}" data-cat="${c.key}">${c.label}</button>`
-  ).join("");
+  if (catSelect){
+    const catCounts = {};
+    TCG_COURSES.forEach(c => { catCounts[c.category] = (catCounts[c.category] || 0) + 1; });
+    const cats = Object.keys(TCG_CATEGORIES).filter(k => catCounts[k]);
+    catSelect.innerHTML = `<option value="all">All categories (${TCG_COURSES.length})</option>` +
+      cats.map(k => `<option value="${k}">${TCG_CATEGORIES[k].label} (${catCounts[k]})</option>`).join("");
+    catSelect.value = cats.includes(activeCat) ? activeCat : "all";
+    activeCat = catSelect.value;
+  }
+
+  const levels = ["all", "Foundation", "Intermediate", "Advanced"];
+  if (levelChipsEl){
+    levelChipsEl.innerHTML = levels.map(l =>
+      `<button type="button" class="chip${l === "all" ? " is-active" : ""}" data-level="${l}">${l === "all" ? "Any level" : l}</button>`
+    ).join("");
+  }
 
   function applyFilters(){
     const q = (search && search.value.trim().toLowerCase()) || "";
     const list = TCG_COURSES.filter(c => {
       const matchCat = activeCat === "all" || c.category === activeCat;
+      const matchLevel = activeLevel === "all" || c.level === activeLevel;
       const matchQ = !q || c.title.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q);
-      return matchCat && matchQ;
+      return matchCat && matchLevel && matchQ;
     });
     tcgRenderGrid("courseGrid", list);
+    if (countEl) countEl.textContent = `${list.length} course${list.length === 1 ? "" : "s"}`;
   }
 
-  chipsEl.addEventListener("click", e => {
-    const btn = e.target.closest(".chip");
-    if (!btn) return;
-    activeCat = btn.dataset.cat;
-    chipsEl.querySelectorAll(".chip").forEach(c => c.classList.toggle("is-active", c === btn));
-    applyFilters();
-  });
+  if (catSelect) catSelect.addEventListener("change", () => { activeCat = catSelect.value; applyFilters(); });
+  if (levelChipsEl){
+    levelChipsEl.addEventListener("click", e => {
+      const btn = e.target.closest(".chip");
+      if (!btn) return;
+      activeLevel = btn.dataset.level;
+      levelChipsEl.querySelectorAll(".chip").forEach(c => c.classList.toggle("is-active", c === btn));
+      applyFilters();
+    });
+  }
   if (search) search.addEventListener("input", applyFilters);
 
   applyFilters();
@@ -132,7 +158,6 @@ function tcgInitCourseDetail(){
 
   document.title = course.title + " — Training Connect Global";
   const cat = tcgCategoryMeta(course.category);
-  const paragraphs = course.description.split("\n\n").map(p => `<p>${p}</p>`).join("");
   const curriculum = course.curriculum.map(i => `<li>${i}</li>`).join("");
 
   root.innerHTML = `
@@ -143,9 +168,7 @@ function tcgInitCourseDetail(){
         <h1>${course.title}</h1>
         <p class="lede">${course.summary}</p>
         <h3>About this course</h3>
-        ${paragraphs}
-        <h3>Who should attend</h3>
-        <p>${course.audience}</p>
+        <p>${course.description}</p>
         <h3>What the course covers</h3>
         <ul class="curriculum">${curriculum}</ul>
       </div>
@@ -155,6 +178,7 @@ function tcgInitCourseDetail(){
             <li><span>Duration</span><b>${course.duration}</b></li>
             <li><span>Delivery mode</span><b>${course.mode}</b></li>
             <li><span>Category</span><b>${cat.label}</b></li>
+            ${course.level && course.level !== "Custom" ? `<li><span>Level</span><b>${course.level}</b></li>` : ""}
           </ul>
           <a class="btn btn-primary btn-block" href="enquire.html?course=${course.slug}">Enquire about this course</a>
           <p class="small-note" style="margin-top:14px">Enquiries are reviewed by the Training Connect Global team and matched to the right training provider and schedule.</p>
@@ -239,9 +263,9 @@ function tcgInitEnquireForm(){
       const result = await res.json();
       if (!result.success) throw new Error(result.message || "Submission failed");
 
-      const list = JSON.parse(localStorage.getItem("tcg_enquiries") || "[]");
+      const list = JSON.parse(localStorage.getItem(TCG_STORAGE_KEY) || "[]");
       list.unshift(data);
-      localStorage.setItem("tcg_enquiries", JSON.stringify(list));
+      localStorage.setItem(TCG_STORAGE_KEY, JSON.stringify(list));
 
       if (successCourse) successCourse.textContent = course ? course.title : "your selected course";
       form.hidden = true;
@@ -258,13 +282,7 @@ function tcgInitEnquireForm(){
   });
 }
 
-/* ---------- User dashboard ---------- */
-const TCG_DEMO_ENQUIRIES = [
-  { name: "You", course: "Applied Statistics for Data Science", submittedAt: "2026-09-23T09:00:00Z", status: "Confirmed" },
-  { name: "You", course: "Data Analysis with SPSS", submittedAt: "2026-09-21T09:00:00Z", status: "Pending" },
-  { name: "You", course: "Digital Skills for the Workplace", submittedAt: "2026-09-18T09:00:00Z", status: "Follow-up" }
-];
-
+/* ---------- Shared helpers for both dashboards ---------- */
 function tcgStatusBadge(status){
   const map = { Confirmed: "badge-green", Pending: "badge-amber", "Follow-up": "badge-blue", Completed: "badge-green" };
   return `<span class="badge ${map[status] || "badge-blue"}">${status}</span>`;
@@ -273,26 +291,38 @@ function tcgStatusBadge(status){
 function tcgFmtDate(iso){
   const d = new Date(iso);
   if (isNaN(d)) return "—";
-  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+function tcgReadEnquiries(){
+  return JSON.parse(localStorage.getItem(TCG_STORAGE_KEY) || "[]").map(e => ({
+    ...e,
+    courseTitle: (tcgFindCourse(e.course) || { title: e.course || "Custom enquiry" }).title
+  }));
+}
+
+/* ---------- User dashboard ---------- */
 function tcgInitDashboard(){
   const body = document.getElementById("dashTableBody");
+  const emptyState = document.getElementById("dashEmptyState");
+  const tableWrap = document.getElementById("dashTableWrap");
   if (!body) return;
-  const local = JSON.parse(localStorage.getItem("tcg_enquiries") || "[]").map(e => ({
-    name: "You",
-    course: (tcgFindCourse(e.course) || { title: e.course || "Custom enquiry" }).title,
-    submittedAt: e.submittedAt,
-    status: e.status || "Pending"
-  }));
-  const all = local.concat(TCG_DEMO_ENQUIRIES);
 
-  body.innerHTML = all.slice(0, 8).map(e => `
-    <tr>
-      <td>${e.course}</td>
-      <td>${tcgFmtDate(e.submittedAt)}</td>
-      <td>${tcgStatusBadge(e.status)}</td>
-    </tr>`).join("");
+  const all = tcgReadEnquiries();
+
+  if (!all.length){
+    if (tableWrap) tableWrap.hidden = true;
+    if (emptyState) emptyState.hidden = false;
+  } else {
+    if (tableWrap) tableWrap.hidden = false;
+    if (emptyState) emptyState.hidden = true;
+    body.innerHTML = all.slice(0, 10).map(e => `
+      <tr>
+        <td>${e.courseTitle}</td>
+        <td>${tcgFmtDate(e.submittedAt)}</td>
+        <td>${tcgStatusBadge(e.status)}</td>
+      </tr>`).join("");
+  }
 
   const total = all.length;
   const pending = all.filter(e => e.status === "Pending").length;
@@ -303,6 +333,51 @@ function tcgInitDashboard(){
   set("statPending", pending);
   set("statConfirmed", confirmed);
   set("statCompleted", completed);
+}
+
+/* ---------- Admin dashboard ----------
+   Without a backend database, a static site has no server-side record of
+   enquiries submitted on OTHER people's devices — there is nowhere for
+   that data to be centrally stored. What this view CAN show, truthfully,
+   is every enquiry submitted from this device/browser, tracked live via
+   localStorage as it happens. That is real, not sample, data — it is
+   just scoped to this device rather than aggregated across all visitors.
+   For a true multi-device admin view, the two backend-free options are:
+   (1) Web3Forms' own dashboard (enable an account at web3forms.com to see
+   every submission in one place), or (2) wiring this admin view up to a
+   small database or spreadsheet backend later. */
+function tcgInitAdminDashboard(){
+  const body = document.getElementById("adminTableBody");
+  const emptyState = document.getElementById("adminEmptyState");
+  const tableWrap = document.getElementById("adminTableWrap");
+  if (!body) return;
+
+  const all = tcgReadEnquiries();
+
+  if (!all.length){
+    if (tableWrap) tableWrap.hidden = true;
+    if (emptyState) emptyState.hidden = false;
+  } else {
+    if (tableWrap) tableWrap.hidden = false;
+    if (emptyState) emptyState.hidden = true;
+    body.innerHTML = all.slice(0, 12).map(e => `
+      <tr>
+        <td>${e.name || "—"}</td>
+        <td>${e.courseTitle}</td>
+        <td>${e.email || "—"}</td>
+        <td>${tcgStatusBadge(e.status)}</td>
+      </tr>`).join("");
+  }
+
+  const total = all.length;
+  const pending = all.filter(e => e.status === "Pending").length;
+  const confirmed = all.filter(e => e.status === "Confirmed").length;
+  const uniqueCourses = new Set(all.map(e => e.course)).size;
+  const set = (id, val) => { const n = document.getElementById(id); if (n) n.textContent = val; };
+  set("statActiveCourses", TCG_COURSES.length);
+  set("statNewEnquiries", total);
+  set("statPendingFollowups", pending);
+  set("statConfirmed", confirmed);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
