@@ -36,7 +36,7 @@
     <div class="wrap">
       <div class="section-head">
         <h1 style="font-size:clamp(2rem,4vw,2.8rem)">Course catalogue</h1>
-        <p class="lede">Filter by category or search by keyword. Every course links through to full details and an enquiry form.</p>
+        <p class="lede">Over 100 professional training programmes across 20 focus areas — filter by category or level, or search by keyword.</p>
       </div>
     </div>
   </section>
@@ -44,9 +44,13 @@
   <section class="section-tight">
     <div class="wrap">
       <div class="search-row">
-        <input type="search" id="courseSearch" placeholder="Search courses — e.g. “Excel”, “leadership”, “SPSS”">
+        <input type="search" id="courseSearch" placeholder="Search courses — e.g. “risk”, “leadership”, “data”">
       </div>
-      <div class="filter-bar" id="filterChips"></div>
+      <div class="filter-controls">
+        <select id="categorySelect" aria-label="Filter by category"></select>
+        <div class="filter-bar" id="levelChips"></div>
+        <span class="results-count" id="resultsCount"></span>
+      </div>
       <div id="courseGrid" class="course-grid"></div>
     </div>
   </section>
@@ -80,9 +84,9 @@
       <div>
         <h4>Categories</h4>
         <ul>
-          <li><a href="courses.html?cat=data">Data &amp; Statistics</a></li>
-          <li><a href="courses.html?cat=leadership">Leadership &amp; Management</a></li>
-          <li><a href="courses.html?cat=finance">Finance &amp; Accounting</a></li>
+          <li><a href="courses.html?cat=leadership-management-strategy">Leadership &amp; Management</a></li>
+          <li><a href="courses.html?cat=data-analytics-business-intelligence">Data &amp; Analytics</a></li>
+          <li><a href="courses.html?cat=facilities-assets-property">Facilities &amp; Property</a></li>
         </ul>
       </div>
       <div>

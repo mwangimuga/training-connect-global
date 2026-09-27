@@ -41,39 +41,38 @@
         <a class="btn btn-primary" href="courses.html">+ Add course</a>
       </div>
 
-      <div class="notice">This is an interactive design preview with sample data. Course management, enquiry assignment and WhatsApp workflows will be connected to the live database and a login-protected admin area.</div>
+      <div class="notice">Enquiries below are tracked live from this device via the enquiry form. A static site has no shared database, so this view can't yet show enquiries submitted from other devices — connecting <a href="https://web3forms.com" target="_blank" rel="noopener" style="color:var(--navy);text-decoration:underline">Web3Forms' own dashboard</a> or a small backend would give a full, cross-device admin view.</div>
 
       <div class="stat-row">
-        <div class="stat"><span>Active courses</span><b>11</b></div>
-        <div class="stat"><span>New enquiries</span><b>37</b></div>
-        <div class="stat"><span>Referrals this month</span><b>19</b></div>
-        <div class="stat"><span>Pending follow-ups</span><b>11</b></div>
+        <div class="stat"><span>Active courses</span><b id="statActiveCourses">0</b></div>
+        <div class="stat"><span>New enquiries</span><b id="statNewEnquiries">0</b></div>
+        <div class="stat"><span>Pending follow-ups</span><b id="statPendingFollowups">0</b></div>
+        <div class="stat"><span>Confirmed</span><b id="statConfirmed">0</b></div>
       </div>
 
       <div class="dash-grid">
-        <div class="panel">
+        <div class="panel" id="adminTableWrap" hidden>
           <h3>Recent enquiries</h3>
           <table>
-            <thead><tr><th>Name</th><th>Programme</th><th>Source</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>Jane W.</td><td>Data Analysis with SPSS</td><td>Website</td><td><span class="badge badge-amber">New</span></td></tr>
-              <tr><td>Peter O.</td><td>Applied Statistics for Data Science</td><td>Referral</td><td><span class="badge badge-green">Confirmed</span></td></tr>
-              <tr><td>Mary A.</td><td>Digital Skills for the Workplace</td><td>WhatsApp</td><td><span class="badge badge-blue">Follow-up</span></td></tr>
-              <tr><td>Brian K.</td><td>Financial Management &amp; Budgeting</td><td>Website</td><td><span class="badge badge-amber">New</span></td></tr>
-              <tr><td>Aisha M.</td><td>Strategic HR Management</td><td>Referral</td><td><span class="badge badge-green">Confirmed</span></td></tr>
-            </tbody>
+            <thead><tr><th>Name</th><th>Course</th><th>Email</th><th>Status</th></tr></thead>
+            <tbody id="adminTableBody"></tbody>
           </table>
         </div>
+        <div class="panel empty-state" id="adminEmptyState" style="grid-column:1/-1">
+          <h3>No enquiries yet</h3>
+          <p>Enquiries submitted through this site will appear here as they come in.</p>
+        </div>
         <div class="panel">
-          <h3>Referral sources</h3>
-          <p class="muted" style="margin:0 0 4px">Website</p>
-          <div class="bar-track"><span class="bar-fill" style="width:74%"></span></div>
-          <p class="muted" style="margin:0 0 4px">WhatsApp</p>
-          <div class="bar-track"><span class="bar-fill" style="width:55%;background:var(--green)"></span></div>
-          <p class="muted" style="margin:0 0 4px">Direct referral</p>
-          <div class="bar-track"><span class="bar-fill" style="width:38%;background:#E0A100"></span></div>
-          <p class="muted" style="margin:0 0 4px">Other</p>
-          <div class="bar-track"><span class="bar-fill" style="width:21%;background:#8A4B00"></span></div>
+          <h3>Catalogue overview</h3>
+          <p class="muted" style="margin:0 0 4px">Leadership, Management &amp; Strategy</p>
+          <div class="bar-track"><span class="bar-fill" style="width:19%"></span></div>
+          <p class="muted" style="margin:0 0 4px">Data, Analytics &amp; Business Intelligence</p>
+          <div class="bar-track"><span class="bar-fill" style="width:12%;background:var(--green)"></span></div>
+          <p class="muted" style="margin:0 0 4px">Facilities, Assets &amp; Property</p>
+          <div class="bar-track"><span class="bar-fill" style="width:9%;background:#E0A100"></span></div>
+          <p class="muted" style="margin:0 0 4px">Technology, AI &amp; Cybersecurity</p>
+          <div class="bar-track"><span class="bar-fill" style="width:9%;background:#8A4B00"></span></div>
+          <p class="small-note" style="margin-top:10px">Share of the 100-course catalogue, by category.</p>
         </div>
       </div>
 
@@ -110,9 +109,9 @@
       <div>
         <h4>Categories</h4>
         <ul>
-          <li><a href="courses.html?cat=data">Data &amp; Statistics</a></li>
-          <li><a href="courses.html?cat=leadership">Leadership &amp; Management</a></li>
-          <li><a href="courses.html?cat=finance">Finance &amp; Accounting</a></li>
+          <li><a href="courses.html?cat=leadership-management-strategy">Leadership &amp; Management</a></li>
+          <li><a href="courses.html?cat=data-analytics-business-intelligence">Data &amp; Analytics</a></li>
+          <li><a href="courses.html?cat=facilities-assets-property">Facilities &amp; Property</a></li>
         </ul>
       </div>
       <div>
@@ -133,5 +132,6 @@
 
 <script src="js/courses-data.js"></script>
 <script src="js/app.js"></script>
+<script>tcgInitAdminDashboard();</script>
 </body>
 </html>
